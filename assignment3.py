@@ -170,4 +170,3 @@ class td_qlearning:
       if q > best:
         best = q
     return best if best != float('-inf') else 0.0
-
