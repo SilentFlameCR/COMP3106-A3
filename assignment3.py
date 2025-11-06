@@ -7,7 +7,7 @@ import os
 # Student Implementation
 
 # Group 133
-# Rahul Rodrigues (101145082), Emily Amos (101311817), Abaan Norman (101305538)
+# Rahul Rodrigues (101145082), Emily Amos (101311817), Abaan Noman (101305538)
 
 class td_qlearning:
 
