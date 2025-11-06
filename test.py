@@ -7,7 +7,7 @@
 import csv, glob, os, sys, math
 from assignment3 import td_qlearning  # your implementation  # noqa
 
-ABS_TOL = 1e-3     # tolerance for Q-values (adjust if TA specifies)
+ABS_TOL = 1e-3     # tolerance for Q-values
 REL_TOL = 1e-5
 
 def _norm_state(s: str) -> str:

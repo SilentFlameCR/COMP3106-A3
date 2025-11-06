@@ -33,10 +33,9 @@ class td_qlearning:
               if not row:
                   continue
               state = row[0].strip()
-              # Some example files may have a dash for terminal line's action.
               action_field = row[1].strip() if len(row) > 1 else ''
               if action_field == '-' or action_field == '':
-                  # For terminal states, store an action of 0 (never selected).
+                  # For terminal states, store an action of 0 (never selected)
                   action = 0
               else:
                   action = int(action_field)
@@ -45,8 +44,7 @@ class td_qlearning:
       if trial:
           trials.append(trial)
 
-    # Initialize Q(s,a) = r(s) for all (s,a) that appear/are feasible
-    # We'll lazily initialize unseen (s,a) pairs during updates as needed.
+    # Initialize Q(s,a) = r(s) for all (s,a) that are feasible
     for trial in trials:
       for (s, a) in trial:
         for act in self._available_actions(s) if not self._is_terminal(s) else [0]:
@@ -56,7 +54,7 @@ class td_qlearning:
 
     # Iterate to convergence over all trials
     tol = 1e-8
-    max_epochs = 20000  # Safe upper bound; will usually converge far earlier.
+    max_epochs = 20000  # Safe upper bound
     for _ in range(max_epochs):
       delta = 0.0
       for trial in trials:
@@ -66,7 +64,7 @@ class td_qlearning:
           s_tp1, _ = trial[idx + 1]
 
           if self._is_terminal(s_t):
-            # No update from a terminal state.
+            # No update from a terminal state
             continue
 
           # Ensure Q entries exist
@@ -86,7 +84,7 @@ class td_qlearning:
           self.Q[(s_t, a_t)] = new
           delta = max(delta, abs(new - old))
 
-        # Optional: we could also ensure terminal state's Q(s,0)=r(s) stays fixed
+        # Ensure terminal state's Q(s,0)=r(s) stays fixed
         s_last, a_last = trial[-1]
         if self._is_terminal(s_last):
           key = (s_last, 0)
@@ -112,13 +110,13 @@ class td_qlearning:
     # state is a string representation of a state
     # Return the optimal action (as an integer) under the learned policy
     if self._is_terminal(state):
-      # No legal action; return 0 to indicate terminal (won't be scored in tests)
+      # No valid action, return 0 to indicate terminal
       return 0
     best_a = None
     best_q = float('-inf')
     for a in self._available_actions(state):
       q = self.Q.get((state, a), self._reward(state))
-      # tie-break prefers largest action
+      # tie-break take largest action
       if q > best_q or (q == best_q and (best_a is None or a > best_a)):
         best_q = q
         best_a = a
@@ -128,7 +126,7 @@ class td_qlearning:
   # -------------- Helpers --------------
   @staticmethod
   def _parse_state(state: str) -> Tuple[int, int, int, str]:
-    # Accept either ASCII '-' or Unicode '−' for non-terminal.
+    # Accept either ASCII '-' or Unicode '−' for non-terminal
     parts = state.strip().split('/')
     if len(parts) != 4:
       raise ValueError(f"Malformed state string: {state}")
